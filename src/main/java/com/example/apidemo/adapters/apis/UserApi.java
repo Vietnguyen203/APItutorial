@@ -57,24 +57,13 @@ public class UserApi {
 
 
 
-//    @PutMapping("/{id}/update")
-//
-//    public ResponseEntity<UserResponse> updateUser(
-//            @PathVariable String id,
-//            @Valid @RequestBody UserCreateRequest request
-//    ){
-//        UserEntity updated = userService.update(id, request);
-//
-//        UserResponse response = new UserResponse();
-//
-//        response.setId(updated.getId());
-//        response.setName(updated.getName());
-//        response.setAge(updated.getAge());
-//        response.setAccount(updated.getAccount());
-//        response.setPassword(updated.getPassword());
-//
-//        return  ResponseEntity
-//                .ok(response);
-//
-//    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable String id,
+            @Valid @RequestBody UserCreateRequest request
+    ) {
+        return ResponseEntity.ok(userService.update(id, request));
+    }
+
+
 }

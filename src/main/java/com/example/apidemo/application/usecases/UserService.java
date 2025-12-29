@@ -52,16 +52,12 @@ public class UserService {
                 .toList();
     }
 
-
-
     @Transactional
     public UserResponse update(String id, UserCreateRequest req) {
-        UUID uuid = parseUuid(id);
-
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
 
-
+        // Nếu đổi account thì mới check trùng
         if (!user.getAccount().equals(req.getAccount())
                 && userRepository.existsByAccount(req.getAccount())) {
             throw new IllegalArgumentException("Account đã tồn tại");
@@ -72,25 +68,15 @@ public class UserService {
         user.setAccount(req.getAccount());
         user.setPassword(req.getPassword());
 
-
         return toResponse(user);
     }
 
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
-            response.setId(UUID.fromString(e.getId()));
-            response.setName(e.getName());
-            response.setAge(e.getAge());
-            response.setAccount(e.getAccount());
-
+        response.setId(UUID.fromString(e.getId()));
+        response.setName(e.getName());
+        response.setAge(e.getAge());
+        response.setAccount(e.getAccount());
         return response;
-    }
-
-    private UUID parseUuid(String id) {
-        try {
-            return UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("ID phải là UUID hợp lệ: " + id);
-        }
     }
 }
