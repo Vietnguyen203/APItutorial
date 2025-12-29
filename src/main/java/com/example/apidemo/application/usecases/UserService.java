@@ -19,36 +19,34 @@ public class UserService {
 
     @Transactional
     public UserResponse create(UserCreateRequest req) {
-
         if (userRepository.existsByAccount(req.getAccount())) {
             throw new IllegalArgumentException("Account đã tồn tại");
         }
 
-
-
         UserEntity user = new UserEntity();
-            user.setId(UUID.randomUUID());
-            user.setName(req.getName());
-            user.setAge(req.getAge());
-            user.setAccount(req.getAccount());
-            user.setPassword(req.getPassword());
+        user.setId(UUID.randomUUID());
+        user.setName(req.getName());
+        user.setAge(req.getAge());
+        user.setAccount(req.getAccount());
+        user.setPassword(req.getPassword());
 
         UserEntity saved = userRepository.save(user);
-
-        return new UserResponse(
-
-                saved.getId().toString(),
-                saved.getName(),
-                saved.getAccount(),
-                saved.getAge()
-        );
-
-
+        return toResponse(saved);
     }
+    private UserResponse toResponse(UserEntity e) {
+        UserResponse response = new UserResponse();
+        response.setId(UUID.fromString(e.getId().toString()));
+        response.setName(e.getName());
+        response.setAge(e.getAge());
+        response.setAccount(e.getAccount());
+        response.setPassword(e.getPassword());
+        return response;
+    }
+
 
     @Transactional(readOnly = true)
     public UserEntity getById(String id) {
-        return userRepository.findById(id)
+        return userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
     }
 

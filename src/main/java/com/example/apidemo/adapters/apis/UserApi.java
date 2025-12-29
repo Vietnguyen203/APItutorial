@@ -26,7 +26,7 @@ public class UserApi {
 
     ){
 
-        UserEntity saved = userService.create(request);
+        UserResponse saved = userService.create(request);
 
         UserResponse response = new UserResponse();
 

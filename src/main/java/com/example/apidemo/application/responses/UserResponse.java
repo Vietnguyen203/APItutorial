@@ -20,7 +20,4 @@ public class UserResponse {
     private String account;
     private String password;
 
-    public UserResponse(String string, String name, String account, Integer age) {
-
-    }
 }
