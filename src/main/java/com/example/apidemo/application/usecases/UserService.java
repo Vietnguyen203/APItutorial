@@ -12,27 +12,26 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public UserResponse create(UserCreateRequest req) {
 
         if (userRepository.existsByAccount(req.getAccount())) {
             throw new IllegalArgumentException("Account đã tồn tại");
         }
 
-
         UserEntity user = new UserEntity();
-        user.setId(UUID.randomUUID());
+        user.setId(UUID.randomUUID().toString());
+
         user.setName(req.getName());
         user.setAge(req.getAge());
         user.setAccount(req.getAccount());
         user.setPassword(req.getPassword());
 
         UserEntity saved = userRepository.save(user);
-
         return toResponse(saved);
     }
 
@@ -46,6 +45,7 @@ public class UserService {
         return toResponse(user);
     }
 
+    @Transactional
     public UserResponse update(String id, UserCreateRequest req) {
         UUID uuid = parseUuid(id);
 
@@ -58,24 +58,21 @@ public class UserService {
             throw new IllegalArgumentException("Account đã tồn tại");
         }
 
-
         user.setName(req.getName());
         user.setAge(req.getAge());
         user.setAccount(req.getAccount());
         user.setPassword(req.getPassword());
 
-        UserEntity saved = userRepository.save(user);
-        return toResponse(saved);
+
+        return toResponse(user);
     }
 
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
-
-            response.setId(e.getId());
-            response.setName(e.getName());
-            response.setAge(e.getAge());
-            response.setAccount(e.getAccount());
-            response.setPassword(e.getPassword());
+        response.setId(e.getId());
+        response.setName(e.getName());
+        response.setAge(e.getAge());
+        response.setAccount(e.getAccount());
 
         return response;
     }

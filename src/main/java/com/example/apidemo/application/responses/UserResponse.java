@@ -15,10 +15,10 @@ import java.util.UUID;
 
 public class UserResponse {
 
-    private UUID id;
+    private String id;
     private String name;
     private int age;
     private String account;
-    private String password;
+//    private String password;
 
 }

@@ -34,7 +34,6 @@ public class UserApi {
         response.setName(saved.getName());
         response.setAge(saved.getAge());
         response.setAccount(saved.getAccount());
-        response.setPassword(saved.getPassword());
 
         return ResponseEntity
                 .status(201)

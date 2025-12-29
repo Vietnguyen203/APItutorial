@@ -19,7 +19,7 @@ public class UserEntity {
 
     @Id
     @Column(name = "ID", length = 36, nullable = false)
-    private UUID id; // UUID
+    private String id;
 
     @Column(name = "NAME", nullable = false)
     private String name;
