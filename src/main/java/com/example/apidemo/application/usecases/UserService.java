@@ -24,22 +24,25 @@ public class UserService {
         }
 
         UserEntity user = new UserEntity();
-        user.setId(UUID.randomUUID());
-        user.setName(req.getName());
-        user.setAge(req.getAge());
-        user.setAccount(req.getAccount());
-        user.setPassword(req.getPassword());
+
+            user.setId(UUID.randomUUID());
+            user.setName(req.getName());
+            user.setAge(req.getAge());
+            user.setAccount(req.getAccount());
+            user.setPassword(req.getPassword());
 
         UserEntity saved = userRepository.save(user);
         return toResponse(saved);
     }
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
-        response.setId(UUID.fromString(e.getId().toString()));
-        response.setName(e.getName());
-        response.setAge(e.getAge());
-        response.setAccount(e.getAccount());
-        response.setPassword(e.getPassword());
+
+            response.setId(UUID.fromString(e.getId().toString()));
+            response.setName(e.getName());
+            response.setAge(e.getAge());
+            response.setAccount(e.getAccount());
+            response.setPassword(e.getPassword());
+
         return response;
     }
 
