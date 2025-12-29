@@ -1,5 +1,6 @@
 package com.example.apidemo.application.responses;
 
+import com.example.apidemo.infrastructure.persistence.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

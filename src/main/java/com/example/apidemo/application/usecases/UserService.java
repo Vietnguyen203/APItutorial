@@ -17,27 +17,61 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Transactional
     public UserResponse create(UserCreateRequest req) {
+
         if (userRepository.existsByAccount(req.getAccount())) {
             throw new IllegalArgumentException("Account đã tồn tại");
         }
 
-        UserEntity user = new UserEntity();
 
-            user.setId(UUID.randomUUID());
-            user.setName(req.getName());
-            user.setAge(req.getAge());
-            user.setAccount(req.getAccount());
-            user.setPassword(req.getPassword());
+        UserEntity user = new UserEntity();
+        user.setId(UUID.randomUUID());
+        user.setName(req.getName());
+        user.setAge(req.getAge());
+        user.setAccount(req.getAccount());
+        user.setPassword(req.getPassword());
+
+        UserEntity saved = userRepository.save(user);
+
+        return toResponse(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getById(String id) {
+        UUID uuid = parseUuid(id);
+
+        UserEntity user = userRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
+
+        return toResponse(user);
+    }
+
+    public UserResponse update(String id, UserCreateRequest req) {
+        UUID uuid = parseUuid(id);
+
+        UserEntity user = userRepository.findById(uuid)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
+
+
+        if (!user.getAccount().equals(req.getAccount())
+                && userRepository.existsByAccount(req.getAccount())) {
+            throw new IllegalArgumentException("Account đã tồn tại");
+        }
+
+
+        user.setName(req.getName());
+        user.setAge(req.getAge());
+        user.setAccount(req.getAccount());
+        user.setPassword(req.getPassword());
 
         UserEntity saved = userRepository.save(user);
         return toResponse(saved);
     }
+
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
 
-            response.setId(UUID.fromString(e.getId().toString()));
+            response.setId(e.getId());
             response.setName(e.getName());
             response.setAge(e.getAge());
             response.setAccount(e.getAccount());
@@ -46,22 +80,11 @@ public class UserService {
         return response;
     }
 
-
-    @Transactional(readOnly = true)
-    public UserEntity getById(String id) {
-        return userRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
-    }
-
-    @Transactional
-    public UserEntity update(String id, UserCreateRequest req) {
-        UserEntity user = getById(id);
-
-        user.setName(req.getName());
-        user.setAge(req.getAge());
-        user.setAccount(req.getAccount());
-        user.setPassword(req.getPassword());
-
-        return userRepository.save(user);
+    private UUID parseUuid(String id) {
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("ID phải là UUID hợp lệ: " + id);
+        }
     }
 }

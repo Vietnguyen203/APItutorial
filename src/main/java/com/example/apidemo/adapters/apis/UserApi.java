@@ -22,7 +22,7 @@ public class UserApi {
     @PostMapping("/create")
 
     public ResponseEntity<UserResponse> createUser(
-         @Valid @RequestBody UserCreateRequest request
+            @Valid @RequestBody UserCreateRequest request
 
     ){
 
@@ -30,11 +30,11 @@ public class UserApi {
 
         UserResponse response = new UserResponse();
 
-            response.setId(saved.getId());
-            response.setName(saved.getName());
-            response.setAge(saved.getAge());
-            response.setAccount(saved.getAccount());
-            response.setPassword(saved.getPassword());
+        response.setId(saved.getId());
+        response.setName(saved.getName());
+        response.setAge(saved.getAge());
+        response.setAccount(saved.getAccount());
+        response.setPassword(saved.getPassword());
 
         return ResponseEntity
                 .status(201)
@@ -45,37 +45,28 @@ public class UserApi {
     public ResponseEntity<UserResponse> getUserInformation(
             @PathVariable String id
     ) {
-        UserEntity user = userService.getById(id);
-
-        UserResponse response = new UserResponse();
-
-        response.setId(user.getId());
-        response.setName(user.getName());
-        response.setAge(user.getAge());
-        response.setAccount(user.getAccount());
-        response.setPassword(user.getPassword());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(userService.getById(id));
     }
 
-    @PutMapping("/{id}/update")
 
-    public ResponseEntity<UserResponse> updateUser(
-            @PathVariable String id,
-            @Valid @RequestBody UserCreateRequest request
-    ){
-        UserEntity updated = userService.update(id, request);
-
-        UserResponse response = new UserResponse();
-
-            response.setId(updated.getId());
-            response.setName(updated.getName());
-            response.setAge(updated.getAge());
-            response.setAccount(updated.getAccount());
-            response.setPassword(updated.getPassword());
-
-        return  ResponseEntity
-                .ok(response);
-
-    }
+//    @PutMapping("/{id}/update")
+//
+//    public ResponseEntity<UserResponse> updateUser(
+//            @PathVariable String id,
+//            @Valid @RequestBody UserCreateRequest request
+//    ){
+//        UserEntity updated = userService.update(id, request);
+//
+//        UserResponse response = new UserResponse();
+//
+//        response.setId(updated.getId());
+//        response.setName(updated.getName());
+//        response.setAge(updated.getAge());
+//        response.setAccount(updated.getAccount());
+//        response.setPassword(updated.getPassword());
+//
+//        return  ResponseEntity
+//                .ok(response);
+//
+//    }
 }
