@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class UserResponse {
 
-    private String id;
+    private UUID id;
     private String name;
     private int age;
     private String account;

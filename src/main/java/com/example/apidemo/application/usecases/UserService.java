@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,6 +44,15 @@ public class UserService {
         return toResponse(user);
     }
 
+    @Transactional(readOnly = true)
+    public List<UserResponse> getAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+
 
     @Transactional
     public UserResponse update(String id, UserCreateRequest req) {
@@ -68,10 +78,10 @@ public class UserService {
 
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
-        response.setId(e.getId());
-        response.setName(e.getName());
-        response.setAge(e.getAge());
-        response.setAccount(e.getAccount());
+            response.setId(UUID.fromString(e.getId()));
+            response.setName(e.getName());
+            response.setAge(e.getAge());
+            response.setAccount(e.getAccount());
 
         return response;
     }
