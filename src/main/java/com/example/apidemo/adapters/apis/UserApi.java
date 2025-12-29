@@ -41,11 +41,10 @@ public class UserApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserInformation(
-            @PathVariable String id
-    ) {
+    public ResponseEntity<UserResponse> getUserInformation(@PathVariable String id) {
         return ResponseEntity.ok(userService.getById(id));
     }
+
 
 
 //    @PutMapping("/{id}/update")

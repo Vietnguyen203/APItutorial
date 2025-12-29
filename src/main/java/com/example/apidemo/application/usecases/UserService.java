@@ -37,19 +37,18 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponse getById(String id) {
-        UUID uuid = parseUuid(id);
-
-        UserEntity user = userRepository.findById(uuid)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
 
         return toResponse(user);
     }
 
+
     @Transactional
     public UserResponse update(String id, UserCreateRequest req) {
         UUID uuid = parseUuid(id);
 
-        UserEntity user = userRepository.findById(uuid)
+        UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
 
 
