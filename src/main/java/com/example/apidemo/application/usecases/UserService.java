@@ -25,7 +25,7 @@ public class UserService {
         }
 
         UserEntity user = new UserEntity();
-        user.setId(UUID.randomUUID().toString());
+        user.setId(String.valueOf(UUID.randomUUID()));
 
         user.setName(req.getName());
         user.setAge(req.getAge());
@@ -57,7 +57,6 @@ public class UserService {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy user id=" + id));
 
-        // Nếu đổi account thì mới check trùng
         if (!user.getAccount().equals(req.getAccount())
                 && userRepository.existsByAccount(req.getAccount())) {
             throw new IllegalArgumentException("Account đã tồn tại");
@@ -71,6 +70,39 @@ public class UserService {
         return toResponse(user);
     }
 
+    @Transactional
+    public UserResponse patch(String id, UserCreateRequest req) {
+
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Không tìm thấy user id=" + id)
+                );
+
+        if (req.getName() != null) {
+            user.setName(req.getName());
+        }
+
+        if (req.getAge() != null) {
+            user.setAge(req.getAge());
+        }
+
+        if (req.getAccount() != null) {
+
+            if (!user.getAccount().equals(req.getAccount())
+                    && userRepository.existsByAccount(req.getAccount())) {
+                throw new IllegalArgumentException("Account đã tồn tại");
+            }
+            user.setAccount(req.getAccount());
+        }
+
+        if (req.getPassword() != null) {
+            user.setPassword(req.getPassword());
+        }
+
+        return toResponse(user);
+    }
+
+
     private UserResponse toResponse(UserEntity e) {
         UserResponse response = new UserResponse();
         response.setId(UUID.fromString(e.getId()));
@@ -78,5 +110,16 @@ public class UserService {
         response.setAge(e.getAge());
         response.setAccount(e.getAccount());
         return response;
+    }
+
+    @Transactional
+    public void deleteById(String id) {
+
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Không tìm thấy user id=" + id)
+                );
+
+        userRepository.delete(user);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -57,12 +58,26 @@ public class UserApi {
 
 
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/putupdate/{id}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable String id,
             @Valid @RequestBody UserCreateRequest request
     ) {
         return ResponseEntity.ok(userService.update(id, request));
+    }
+
+    @PatchMapping("/patchupdate/{id}")
+    public ResponseEntity<UserResponse> patchUser(
+            @PathVariable String id,
+            @RequestBody UserCreateRequest request
+    ) {
+        return ResponseEntity.ok(userService.patch(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok("Xoá user thành công");
     }
 
 
